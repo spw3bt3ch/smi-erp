@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: erp-payroll-system
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: FLASK_DEBUG
+        value: False
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: erp-database
+          property: connectionString
+      - key: MAIL_SERVER
+        value: smtp.gmail.com
+      - key: MAIL_PORT
+        value: 587
+      - key: MAIL_USE_TLS
+        value: True
+      - key: MAIL_USERNAME
+        value: samueloluwapelumi8@gmail.com
+      - key: MAIL_PASSWORD
+        value: zgwv xctm atos lxzj
+      - key: MAIL_DEFAULT_SENDER
+        value: samueloluwapelumi8@gmail.com
