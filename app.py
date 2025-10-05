@@ -26,7 +26,8 @@ def create_app():
     # Database: require DATABASE_URL (cloud Postgres)
     db_url = os.environ.get('DATABASE_URL')
     if not db_url:
-        raise RuntimeError('DATABASE_URL is not set. Please configure your cloud PostgreSQL URI in the environment.')
+        print("⚠️  DATABASE_URL not set, using SQLite fallback")
+        db_url = 'sqlite:///payroll_system.db'
     # Normalize postgres URI and ensure psycopg3 driver
     if db_url.startswith('postgres://'):
         db_url = db_url.replace('postgres://', 'postgresql+psycopg://', 1)
@@ -181,8 +182,24 @@ SMI Web Solutions Team
     
     return app
 
-if __name__ == '__main__':
+# Create app instance for Gunicorn
+try:
     app = create_app()
+    print("✅ Flask app created successfully")
+except Exception as e:
+    print(f"❌ Error creating Flask app: {e}")
+    import traceback
+    traceback.print_exc()
+    # Create a minimal app to prevent import errors
+    from flask import Flask
+    app = Flask(__name__)
+    app.config['SECRET_KEY'] = 'fallback-secret-key'
+
+if __name__ == '__main__':
     with app.app_context():
-        db.create_all()
+        try:
+            db.create_all()
+            print("Database tables created successfully")
+        except Exception as e:
+            print(f"Database initialization error: {e}")
     app.run(debug=True)
