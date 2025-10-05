@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Login - ERP Payroll System{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
+    <!-- Professional Background Pattern -->
+    <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%233b82f6" fill-opacity="0.1"%3E%3Cpath d="M30 30c0-8.284-6.716-15-15-15s-15 6.716-15 15 6.716 15 15 15 15-6.716 15-15zm15 0c0-8.284-6.716-15-15-15s-15 6.716-15 15 6.716 15 15 15 15-6.716 15-15z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+    
+    <!-- Main Content Area -->
+    <div class="flex-1 flex items-center justify-center py-8 md:py-12 px-4 sm:px-6 lg:px-8 relative">
+        <div class="max-w-md w-full">
+            <!-- Logo and Header Section -->
+            <div class="text-center mb-8 md:mb-10">
+                <div class="mx-auto h-20 w-20 md:h-24 md:w-24 bg-gradient-to-br from-blue-600 to-blue-700 rounded-3xl shadow-2xl flex items-center justify-center mb-6 md:mb-8 transform hover:scale-105 transition-all duration-300">
+                    <svg class="h-10 w-10 md:h-12 md:w-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                </div>
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 md:mb-4 tracking-tight">
+                    Welcome Back
+                </h1>
+                <p class="text-lg md:text-xl text-gray-600 font-medium">
+                    Sign in to your ERP account
+                </p>
+            </div>
+
+            <!-- Login Form -->
+            <div class="bg-white rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8 lg:p-10 border border-gray-100 backdrop-blur-sm">
+                <form class="space-y-6 md:space-y-8" method="POST">
+                    {{ form.hidden_tag() }}
+                    
+                    <!-- Email Field -->
+                    <div class="space-y-2">
+                        <label for="email" class="block text-sm font-bold text-gray-800 mb-2 md:mb-3">
+                            Email
+                        </label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-3 md:pl-4 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 md:h-6 md:w-6 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H8m0 0l-4-4m4 4l-4 4m12-4h4m0 0l4-4m-4 4l4 4" />
+                                </svg>
+                            </div>
+                            {{ form.email(class="block w-full pl-10 md:pl-12 pr-4 py-3 md:py-4 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 hover:border-gray-300 touch-target", placeholder="Enter your email") }}
+                        </div>
+                        {% if form.email.errors %}
+                            <div class="mt-2 text-red-600 text-sm">
+                                {% for error in form.email.errors %}
+                                    <div class="flex items-center">
+                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="space-y-2">
+                        <label for="password" class="block text-sm font-bold text-gray-800 mb-2 md:mb-3">
+                            Password
+                        </label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-3 md:pl-4 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 md:h-6 md:w-6 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
+                            </div>
+                            {{ form.password(class="block w-full pl-10 md:pl-12 pr-4 py-3 md:py-4 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 hover:border-gray-300 touch-target", placeholder="Enter your password") }}
+                        </div>
+                        {% if form.password.errors %}
+                            <div class="mt-2 text-red-600 text-sm">
+                                {% for error in form.password.errors %}
+                                    <div class="flex items-center">
+                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Remember Me -->
+                    <div class="flex items-center group">
+                        {{ form.remember_me(class="h-5 w-5 text-blue-600 focus:ring-4 focus:ring-blue-100 border-2 border-gray-300 rounded-lg transition-all duration-200 group-hover:border-blue-400 touch-target") }}
+                        <label for="remember_me" class="ml-3 block text-sm font-semibold text-gray-700 group-hover:text-gray-900">
+                            Remember me
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-2 md:pt-4">
+                        <button type="submit" class="w-full flex justify-center items-center py-3 md:py-4 px-6 border border-transparent rounded-xl text-base md:text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-100 shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-200 touch-target">
+                            <svg class="w-5 h-5 md:w-6 md:h-6 text-blue-200 group-hover:text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                            </svg>
+                            Sign In
+                        </button>
+                    </div>
+
+                    <!-- Register Link -->
+                    <div class="text-center pt-4 md:pt-6 border-t border-gray-100">
+                        <p class="text-sm md:text-base font-medium text-gray-600">
+                            Don't have an account? 
+                            <a href="{{ url_for('auth.register') }}" class="font-bold text-blue-600 hover:underline touch-target">
+                                Sign up
+                            </a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

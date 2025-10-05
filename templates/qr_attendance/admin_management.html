@@ -1,0 +1,423 @@
+{% extends "base.html" %}
+
+{% block title %}QR Code Management - ERP Payroll System{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Page Header -->
+    <div class="md:flex md:items-center md:justify-between">
+        <div class="flex-1 min-w-0">
+            <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+                QR Code Management
+            </h2>
+            <p class="mt-1 text-sm text-gray-500">
+                Generate and manage QR codes for office locations.
+            </p>
+        </div>
+    </div>
+
+    <!-- Add New Office Location (Admin) -->
+    {% if current_user.role in ['admin','hr'] %}
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl shadow-lg p-8">
+        <div class="flex items-center mb-6">
+            <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold text-gray-900">Add New Office Location</h3>
+                <p class="text-sm text-gray-600">Create a new office location for QR code attendance</p>
+            </div>
+        </div>
+        
+        <form method="POST" action="{{ url_for('qr_attendance.manage_locations') }}" class="space-y-6" id="locationForm">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="action" value="create">
+            
+            <!-- Location Name -->
+            <div>
+                <label for="locationName" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Location Name <span class="text-red-500">*</span>
+                </label>
+                <input id="locationName" name="name" required 
+                       class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                       placeholder="e.g., Main Office, Branch Office, Warehouse">
+            </div>
+            
+            <!-- Address -->
+            <div>
+                <label for="locationAddress" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Full Address <span class="text-red-500">*</span>
+                </label>
+                <textarea id="locationAddress" name="address" required rows="2"
+                          class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 resize-none"
+                          placeholder="Enter complete address including street, city, state, postal code"></textarea>
+            </div>
+            
+            
+            <!-- Radius Setting -->
+            <div class="bg-white rounded-lg p-6 border border-gray-200">
+                <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Attendance Radius
+                </h4>
+                <p class="text-sm text-gray-600 mb-4">Set the maximum distance employees can be from this location to clock in/out</p>
+                
+                <div class="max-w-md">
+                    <label for="radius_meters" class="block text-sm font-medium text-gray-700 mb-2">
+                        Radius (meters) <span class="text-red-500">*</span>
+                    </label>
+                    <div class="flex items-center space-x-4">
+                        <input id="radius_meters" name="radius_meters" type="range" min="10" max="1000" value="100" 
+                               class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                               oninput="updateRadiusValue(this.value)">
+                        <div class="w-20">
+                            <input type="number" id="radius_display" min="10" max="1000" value="100" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md text-center"
+                                   onchange="updateRadiusSlider(this.value)">
+                        </div>
+                        <span class="text-sm text-gray-600">m</span>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>10m</span>
+                        <span>500m</span>
+                        <span>1000m</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Form Actions -->
+            <div class="flex items-center justify-between pt-6 border-t border-gray-200">
+                <div class="text-sm text-gray-600">
+                    <span class="text-red-500">*</span> Required fields
+                </div>
+                <div class="flex space-x-3">
+                    <button type="button" onclick="resetForm()" 
+                            class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors duration-200">
+                        Reset
+                    </button>
+                    <button type="submit" 
+                            class="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 font-medium shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        Add Location
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Office Locations -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for location_id, location in locations.items() %}
+        <div class="bg-white shadow rounded-lg p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-medium text-gray-900">{{ location.name }}</h3>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ 'bg-green-100 text-green-800' if location.active else 'bg-gray-100 text-gray-600' }}">
+                    {{ 'Active' if location.active else 'Inactive' }}
+                </span>
+            </div>
+            
+            <div class="space-y-2 mb-4">
+                <p class="text-sm text-gray-600">
+                    <strong>Address:</strong> {{ location.address }}
+                </p>
+                <p class="text-sm text-gray-600">
+                    <strong>Radius:</strong> {{ location.radius }}m
+                </p>
+                {% if location.coordinates %}
+                <p class="text-sm text-gray-600">
+                    <strong>Coordinates:</strong> {{ "%.5f"|format(location.coordinates.lat) }}, {{ "%.5f"|format(location.coordinates.lng) }}
+                </p>
+                {% else %}
+                <p class="text-sm text-gray-600">
+                    <strong>GPS:</strong> <span class="text-gray-500 italic">Not required</span>
+                </p>
+                {% endif %}
+            </div>
+            
+            <div class="flex space-x-2">
+                <a href="{{ url_for('qr_attendance.generate_qr', location_id=location_id) }}" 
+                   class="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 text-center text-sm font-medium">Generate QR Code</a>
+                <button onclick="viewLocationDetails('{{ location_id }}')" 
+                        class="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">Details</button>
+                {% if current_user.role in ['admin','hr'] %}
+                <form method="POST" action="{{ url_for('qr_attendance.manage_locations') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="action" value="deactivate">
+                    <input type="hidden" name="id" value="{{ location_id }}">
+                    <button class="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 text-sm font-medium">Deactivate</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- QR Code Statistics -->
+    <div class="bg-white shadow rounded-lg p-6">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">QR Code Statistics</h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="bg-blue-50 rounded-lg p-4">
+                <div class="text-2xl font-bold text-blue-600" id="total-scans">-</div>
+                <div class="text-sm text-blue-600">Total Scans Today</div>
+            </div>
+            <div class="bg-green-50 rounded-lg p-4">
+                <div class="text-2xl font-bold text-green-600" id="successful-scans">-</div>
+                <div class="text-sm text-green-600">Successful Scans</div>
+            </div>
+            <div class="bg-yellow-50 rounded-lg p-4">
+                <div class="text-2xl font-bold text-yellow-600" id="active-locations">-</div>
+                <div class="text-sm text-yellow-600">Active Locations</div>
+            </div>
+            <div class="bg-purple-50 rounded-lg p-4">
+                <div class="text-2xl font-bold text-purple-600" id="qr-codes-generated">-</div>
+                <div class="text-sm text-purple-600">QR Codes Generated</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent QR Scans -->
+    <div class="bg-white shadow rounded-lg p-6">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">Recent QR Scans</h3>
+        <div id="recent-scans">
+            <div class="text-center text-gray-500 py-8">
+                <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <p>No recent scans available</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Instructions -->
+    <div class="bg-white shadow rounded-lg p-6">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">QR Code Instructions</h3>
+        <div class="space-y-4">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <span class="text-indigo-600 font-semibold text-sm">1</span>
+                    </div>
+                </div>
+                <div class="ml-3">
+                    <h4 class="text-sm font-medium text-gray-900">Generate QR Code</h4>
+                    <p class="text-sm text-gray-600">Click "Generate QR Code" for the desired office location. The QR code will be valid for 24 hours.</p>
+                </div>
+            </div>
+            
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <span class="text-indigo-600 font-semibold text-sm">2</span>
+                    </div>
+                </div>
+                <div class="ml-3">
+                    <h4 class="text-sm font-medium text-gray-900">Display QR Code</h4>
+                    <p class="text-sm text-gray-600">Print or display the QR code at the office location where employees should clock in/out.</p>
+                </div>
+            </div>
+            
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <span class="text-indigo-600 font-semibold text-sm">3</span>
+                    </div>
+                </div>
+                <div class="ml-3">
+                    <h4 class="text-sm font-medium text-gray-900">Employee Scanning</h4>
+                    <p class="text-sm text-gray-600">Employees use their mobile devices to scan the QR code and clock in/out automatically.</p>
+                </div>
+            </div>
+            
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <span class="text-indigo-600 font-semibold text-sm">4</span>
+                    </div>
+                </div>
+                <div class="ml-3">
+                    <h4 class="text-sm font-medium text-gray-900">Location Validation</h4>
+                    <p class="text-sm text-gray-600">The system validates that employees are physically present at the office location before allowing clock in/out.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Location Details Modal -->
+<div id="locationModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Location Details</h3>
+            <div id="locationDetails">
+                <!-- Location details will be loaded here -->
+            </div>
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeLocationModal()" 
+                        class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Load statistics
+function loadStatistics() {
+    // Simulate loading statistics (in real app, fetch from API)
+    document.getElementById('total-scans').textContent = '47';
+    document.getElementById('successful-scans').textContent = '45';
+    document.getElementById('active-locations').textContent = '{{ locations|length }}';
+    document.getElementById('qr-codes-generated').textContent = '12';
+}
+
+// View location details
+function viewLocationDetails(locationId) {
+    const locations = {{ locations|tojson }};
+    const location = locations[locationId];
+    
+    if (location) {
+        document.getElementById('locationDetails').innerHTML = `
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Location Name</label>
+                    <p class="text-sm text-gray-900">${location.name}</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Address</label>
+                    <p class="text-sm text-gray-900">${location.address}</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Coordinates</label>
+                    <p class="text-sm text-gray-900">${location.coordinates.lat}, ${location.coordinates.lng}</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Radius</label>
+                    <p class="text-sm text-gray-900">${location.radius} meters</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Status</label>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        Active
+                    </span>
+                </div>
+            </div>
+        `;
+        document.getElementById('locationModal').classList.remove('hidden');
+    }
+}
+
+// Close location modal
+function closeLocationModal() {
+    document.getElementById('locationModal').classList.add('hidden');
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('locationModal');
+    if (event.target === modal) {
+        closeLocationModal();
+    }
+}
+
+// Form helper functions
+function updateRadiusValue(value) {
+    document.getElementById('radius_display').value = value;
+}
+
+function updateRadiusSlider(value) {
+    const slider = document.getElementById('radius_meters');
+    const numValue = parseInt(value);
+    if (numValue >= 10 && numValue <= 1000) {
+        slider.value = numValue;
+    } else {
+        // Reset to valid range
+        if (numValue < 10) {
+            document.getElementById('radius_display').value = 10;
+            slider.value = 10;
+        } else if (numValue > 1000) {
+            document.getElementById('radius_display').value = 1000;
+            slider.value = 1000;
+        }
+    }
+}
+
+function resetForm() {
+    document.getElementById('locationForm').reset();
+    document.getElementById('radius_meters').value = 100;
+    document.getElementById('radius_display').value = 100;
+    showNotification('Form reset successfully', 'info');
+}
+
+function showNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white font-medium transform transition-all duration-300 translate-x-full`;
+    
+    // Set color based on type
+    if (type === 'success') {
+        notification.classList.add('bg-green-500');
+    } else if (type === 'error') {
+        notification.classList.add('bg-red-500');
+    } else {
+        notification.classList.add('bg-blue-500');
+    }
+    
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+    }, 100);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+
+// Form validation
+function validateForm() {
+    const name = document.getElementById('locationName').value.trim();
+    const address = document.getElementById('locationAddress').value.trim();
+    
+    if (!name) {
+        showNotification('Please enter a location name', 'error');
+        return false;
+    }
+    
+    if (!address) {
+        showNotification('Please enter an address', 'error');
+        return false;
+    }
+    
+    return true;
+}
+
+// Add form validation on submit
+document.addEventListener('DOMContentLoaded', function() {
+    loadStatistics();
+    
+    const form = document.getElementById('locationForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            if (!validateForm()) {
+                e.preventDefault();
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

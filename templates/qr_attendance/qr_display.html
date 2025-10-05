@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}QR Code - {{ location.name }} - ERP Payroll System{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white shadow-lg rounded-lg p-8">
+        <div class="text-center">
+            <h2 class="text-3xl font-bold text-gray-900 mb-2">QR Code for {{ location.name }}</h2>
+            <p class="text-gray-600 mb-6">Display this QR code at the office location for employees to scan</p>
+            
+            <!-- QR Code Display -->
+            <div class="bg-white border-4 border-gray-200 rounded-lg p-8 mb-6 inline-block">
+                <img src="data:image/png;base64,{{ qr_code }}" 
+                     alt="QR Code for {{ location.name }}" 
+                     class="mx-auto">
+            </div>
+            
+            <!-- QR Code Information -->
+            <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">QR Code Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                    <div>
+                        <p class="text-sm text-gray-600"><strong>Location:</strong> {{ location.name }}</p>
+                        <p class="text-sm text-gray-600"><strong>Address:</strong> {{ location.address }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600"><strong>Generated:</strong> {{ qr_data.timestamp[:19] }}</p>
+                        <p class="text-sm text-gray-600"><strong>Expires:</strong> {{ qr_data.expires_at[:19] }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Instructions -->
+            <div class="bg-blue-50 rounded-lg p-6 mb-6">
+                <h3 class="text-lg font-medium text-blue-900 mb-4">Instructions</h3>
+                <div class="space-y-2 text-left">
+                    <p class="text-sm text-blue-800">1. Print this QR code or display it on a screen at the office location</p>
+                    <p class="text-sm text-blue-800">2. Ensure the QR code is clearly visible and well-lit</p>
+                    <p class="text-sm text-blue-800">3. Employees should scan this QR code to clock in/out</p>
+                    <p class="text-sm text-blue-800">4. This QR code is valid for 24 hours from generation</p>
+                </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="flex justify-center space-x-4">
+                <button onclick="window.print()" 
+                        class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                    </svg>
+                    Print QR Code
+                </button>
+                
+                <button onclick="downloadQR()" 
+                        class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Download QR Code
+                </button>
+                
+                <a href="{{ url_for('qr_attendance.index') }}" 
+                   class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                    Back to Management
+                </a>
+            </div>
+            
+            <!-- QR Code Data (for debugging) -->
+            <details class="mt-8 text-left">
+                <summary class="cursor-pointer text-sm text-gray-500 hover:text-gray-700">
+                    Show QR Code Data (for debugging)
+                </summary>
+                <div class="mt-2 p-4 bg-gray-100 rounded-lg">
+                    <pre class="text-xs text-gray-700 overflow-x-auto">{{ qr_data|tojson(indent=2) }}</pre>
+                </div>
+            </details>
+        </div>
+    </div>
+</div>
+
+<script>
+// Download QR code as image
+function downloadQR() {
+    const qrCodeImg = document.querySelector('img[alt*="QR Code"]');
+    const link = document.createElement('a');
+    link.download = `qr-code-{{ location.name|lower|replace(' ', '-') }}-{{ qr_data.timestamp[:10] }}.png`;
+    link.href = qrCodeImg.src;
+    link.click();
+}
+
+// Auto-refresh countdown
+function startCountdown() {
+    const expiresAt = new Date('{{ qr_data.expires_at }}');
+    const now = new Date();
+    const timeLeft = expiresAt - now;
+    
+    if (timeLeft > 0) {
+        const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+        
+        console.log(`QR Code expires in: ${hours}h ${minutes}m ${seconds}s`);
+        
+        // Update every minute
+        setTimeout(startCountdown, 60000);
+    } else {
+        console.log('QR Code has expired');
+    }
+}
+
+// Start countdown on page load
+document.addEventListener('DOMContentLoaded', function() {
+    startCountdown();
+});
+
+// Print styles
+window.addEventListener('beforeprint', function() {
+    document.body.classList.add('printing');
+});
+
+window.addEventListener('afterprint', function() {
+    document.body.classList.remove('printing');
+});
+</script>
+
+<style>
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    body {
+        background: white !important;
+    }
+    
+    .bg-white {
+        background: white !important;
+    }
+    
+    .border-4 {
+        border-width: 2px !important;
+    }
+    
+    .shadow-lg {
+        box-shadow: none !important;
+    }
+}
+
+.printing .no-print {
+    display: none !important;
+}
+</style>
+{% endblock %}

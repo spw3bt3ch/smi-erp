@@ -1,0 +1,188 @@
+from flask import Flask, redirect, url_for, render_template, request, flash
+from flask_migrate import Migrate
+from flask_login import LoginManager
+from flask_wtf.csrf import CSRFProtect, generate_csrf
+from flask_mail import Mail, Message
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Import db from models
+from models import db
+
+# Initialize extensions
+migrate = Migrate()
+login_manager = LoginManager()
+csrf = CSRFProtect()
+mail = Mail()
+
+def create_app():
+    app = Flask(__name__)
+    
+    # Configuration
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
+    # Database: require DATABASE_URL (cloud Postgres)
+    db_url = os.environ.get('DATABASE_URL')
+    if not db_url:
+        raise RuntimeError('DATABASE_URL is not set. Please configure your cloud PostgreSQL URI in the environment.')
+    # Normalize postgres URI and ensure psycopg3 driver
+    if db_url.startswith('postgres://'):
+        db_url = db_url.replace('postgres://', 'postgresql+psycopg://', 1)
+    elif db_url.startswith('postgresql://') and '+psycopg' not in db_url:
+        db_url = db_url.replace('postgresql://', 'postgresql+psycopg://', 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    # CSRF configuration
+    app.config['WTF_CSRF_ENABLED'] = True
+    app.config['WTF_CSRF_TIME_LIMIT'] = None  # No time limit for CSRF tokens
+    
+    # Email configuration
+    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+    app.config['MAIL_PORT'] = 587
+    app.config['MAIL_USE_TLS'] = True
+    app.config['MAIL_USERNAME'] = 'samueloluwapelumi8@gmail.com'
+    app.config['MAIL_PASSWORD'] = 'zgwv xctm atos lxzj'
+    app.config['MAIL_DEFAULT_SENDER'] = 'samueloluwapelumi8@gmail.com'
+    
+    # Initialize extensions with app
+    db.init_app(app)
+    migrate.init_app(app, db)
+    login_manager.init_app(app)
+    csrf.init_app(app)
+    mail.init_app(app)
+    
+    # Expose csrf_token() in templates for non-FlaskForm forms
+    @app.context_processor
+    def inject_csrf_token():
+        return dict(csrf_token=generate_csrf)
+    
+    # Import models
+    from models import User, Employee, Payroll, Attendance, Department
+    
+    # Configure login manager
+    login_manager.login_view = 'auth.login'
+    login_manager.login_message = 'Please log in to access this page.'
+    login_manager.login_message_category = 'info'
+    
+    # User loader for Flask-Login
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+    
+    # Homepage route
+    @app.route('/')
+    def home():
+        return render_template('home.html')
+    
+    # Contact page route
+    @app.route('/contact', methods=['GET', 'POST'])
+    def contact():
+        from forms import ContactForm
+        form = ContactForm()
+        
+        if request.method == 'POST':
+            form = ContactForm(request.form)
+            if form.validate_on_submit():
+                try:
+                    # Get form data
+                    first_name = form.firstName.data
+                    last_name = form.lastName.data
+                    email = form.email.data
+                    company = form.company.data or ''
+                    phone = form.phone.data or ''
+                    subject = form.subject.data
+                    message = form.message.data
+                    
+                    # Create email message
+                    msg = Message(
+                        subject=f"Contact Form: {subject} - {first_name} {last_name}",
+                        sender=app.config['MAIL_DEFAULT_SENDER'],
+                        recipients=[app.config['MAIL_DEFAULT_SENDER']],
+                        reply_to=email
+                    )
+                    
+                    # Email body
+                    msg.body = f"""
+New Contact Form Submission
+
+Name: {first_name} {last_name}
+Email: {email}
+Company: {company or 'Not provided'}
+Phone: {phone or 'Not provided'}
+Subject: {subject}
+
+Message:
+{message}
+
+---
+This message was sent from the ERP Payroll System contact form.
+                    """
+                    
+                    # Send email
+                    mail.send(msg)
+                    
+                    # Send confirmation email to user
+                    confirmation_msg = Message(
+                        subject="Thank you for contacting us - ERP Payroll System",
+                        sender=app.config['MAIL_DEFAULT_SENDER'],
+                        recipients=[email]
+                    )
+                    
+                    confirmation_msg.body = f"""
+Dear {first_name},
+
+Thank you for contacting us regarding our ERP Payroll System. We have received your message and will get back to you within 24 hours.
+
+Your inquiry details:
+Subject: {subject}
+Message: {message}
+
+If you have any urgent questions, please don't hesitate to call us at +2347077705842.
+
+Best regards,
+SMI Web Solutions Team
+                    """
+                    
+                    mail.send(confirmation_msg)
+                    
+                    flash('Thank you for your message! We have sent you a confirmation email and will get back to you within 24 hours.', 'success')
+                    return redirect(url_for('contact'))
+                    
+                except Exception as e:
+                    flash('Sorry, there was an error sending your message. Please try again or contact us directly.', 'error')
+                    return render_template('contact.html', form=form)
+            else:
+                # Form validation failed
+                flash('Please correct the errors below and try again.', 'error')
+        
+        return render_template('contact.html', form=form)
+    
+    # Register blueprints
+    from blueprints.auth import auth_bp
+    from blueprints.employees import employees_bp
+    from blueprints.payroll import payroll_bp
+    from blueprints.admin import admin_bp
+    from blueprints.api import api_bp
+    from blueprints.attendance import attendance_bp
+    from blueprints.qr_attendance import qr_attendance_bp
+    from blueprints.time_management import time_management_bp
+    
+    app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(employees_bp, url_prefix='/employees')
+    app.register_blueprint(payroll_bp, url_prefix='/payroll')
+    app.register_blueprint(admin_bp, url_prefix='/admin')
+    app.register_blueprint(api_bp, url_prefix='/api')
+    app.register_blueprint(attendance_bp, url_prefix='/attendance')
+    app.register_blueprint(qr_attendance_bp, url_prefix='/qr-attendance')
+    app.register_blueprint(time_management_bp, url_prefix='/time-management')
+    
+    return app
+
+if __name__ == '__main__':
+    app = create_app()
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)

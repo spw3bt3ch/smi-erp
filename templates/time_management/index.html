@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block title %}Time Management - ERP Payroll System{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Page Header -->
+    <div class="md:flex md:items-center md:justify-between">
+        <div class="flex-1 min-w-0">
+            <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+                Time Management
+            </h2>
+            <p class="mt-1 text-sm text-gray-500">
+                Manage office hours, attendance policies, and time tracking settings.
+            </p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Total Employees</dt>
+                            <dd class="text-lg font-medium text-gray-900">{{ total_employees }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-6 w-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Clocked In Today</dt>
+                            <dd class="text-lg font-medium text-gray-900">{{ clocked_in_today }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-6 w-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Late Arrivals</dt>
+                            <dd class="text-lg font-medium text-gray-900">{{ late_arrivals }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-6 w-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Early Departures</dt>
+                            <dd class="text-lg font-medium text-gray-900">{{ early_departures }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Office Hours Management -->
+        <div class="bg-white shadow rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Office Hours</h3>
+                
+                {% if default_hours %}
+                <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                    <h4 class="text-sm font-medium text-blue-900 mb-2">Current Default Hours</h4>
+                    <div class="text-sm text-blue-700">
+                        <p><strong>Clock In:</strong> {{ default_hours.official_clock_in.strftime('%H:%M') }}</p>
+                        <p><strong>Clock Out:</strong> {{ default_hours.official_clock_out.strftime('%H:%M') }}</p>
+                        <p><strong>Grace Period:</strong> {{ default_hours.clock_in_grace_period }} min late, {{ default_hours.clock_out_grace_period }} min early</p>
+                        <p><strong>Working Days:</strong> 
+                            {% set days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] %}
+                            {% for day_num in default_hours.get_working_days_list() %}
+                                {{ days[day_num-1] }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+                {% else %}
+                <div class="bg-yellow-50 rounded-lg p-4 mb-4">
+                    <p class="text-sm text-yellow-700">No default office hours set. Please configure office hours.</p>
+                </div>
+                {% endif %}
+                
+                <div class="flex space-x-3">
+                    <a href="{{ url_for('time_management.office_hours') }}" 
+                       class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        Manage Hours
+                    </a>
+                    <a href="{{ url_for('time_management.add_office_hours') }}" 
+                       class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                        Add New Hours
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attendance Policies -->
+        <div class="bg-white shadow rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Attendance Policies</h3>
+                
+                {% if default_policy %}
+                <div class="bg-green-50 rounded-lg p-4 mb-4">
+                    <h4 class="text-sm font-medium text-green-900 mb-2">Current Default Policy</h4>
+                    <div class="text-sm text-green-700">
+                        <p><strong>Late Penalty:</strong> {{ default_policy.late_penalty_type.title() }} 
+                           {% if default_policy.late_penalty_amount > 0 %}({{ "%.2f"|format(default_policy.late_penalty_amount) }}){% endif %}</p>
+                        <p><strong>Early Departure:</strong> {{ default_policy.early_departure_penalty_type.title() }}
+                           {% if default_policy.early_departure_penalty_amount > 0 %}({{ "%.2f"|format(default_policy.early_departure_penalty_amount) }}){% endif %}</p>
+                        <p><strong>Overtime Rate:</strong> {{ default_policy.overtime_rate }}x</p>
+                    </div>
+                </div>
+                {% else %}
+                <div class="bg-yellow-50 rounded-lg p-4 mb-4">
+                    <p class="text-sm text-yellow-700">No default attendance policy set. Please configure policies.</p>
+                </div>
+                {% endif %}
+                
+                <div class="flex space-x-3">
+                    <a href="{{ url_for('time_management.attendance_policies') }}" 
+                       class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        Manage Policies
+                    </a>
+                    <a href="{{ url_for('time_management.add_attendance_policy') }}" 
+                       class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                        Add New Policy
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Quick Actions</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <a href="{{ url_for('time_management.reports') }}" 
+                   class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                    View Reports
+                </a>
+                
+                <a href="{{ url_for('attendance.index') }}" 
+                   class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    View Attendance
+                </a>
+                
+                <a href="{{ url_for('qr_attendance.index') }}" 
+                   class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+                    </svg>
+                    QR Attendance
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

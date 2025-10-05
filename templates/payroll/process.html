@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %}Process Payroll - ERP Payroll System{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-6">Process Payroll</h3>
+            
+            <form method="POST" class="space-y-6">
+                {{ form.hidden_tag() }}
+                
+                <!-- Employee Selection -->
+                <div class="border-b border-gray-200 pb-6">
+                    <h4 class="text-md font-medium text-gray-900 mb-4">Employee Information</h4>
+                    <div>
+                        {{ form.employee_id.label(class="block text-sm font-medium text-gray-700") }}
+                        {{ form.employee_id(class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}
+                        {% if form.employee_id.errors %}
+                            <div class="text-red-500 text-sm mt-1">
+                                {% for error in form.employee_id.errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Pay Period -->
+                <div class="border-b border-gray-200 pb-6">
+                    <h4 class="text-md font-medium text-gray-900 mb-4">Pay Period</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            {{ form.pay_period_start.label(class="block text-sm font-medium text-gray-700") }}
+                            {{ form.pay_period_start(class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}
+                            {% if form.pay_period_start.errors %}
+                                <div class="text-red-500 text-sm mt-1">
+                                    {% for error in form.pay_period_start.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div>
+                            {{ form.pay_period_end.label(class="block text-sm font-medium text-gray-700") }}
+                            {{ form.pay_period_end(class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}
+                            {% if form.pay_period_end.errors %}
+                                <div class="text-red-500 text-sm mt-1">
+                                    {% for error in form.pay_period_end.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earnings -->
+                <div class="border-b border-gray-200 pb-6">
+                    <h4 class="text-md font-medium text-gray-900 mb-4">Earnings</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            {{ form.basic_salary.label(class="block text-sm font-medium text-gray-700") }}
+                            {{ form.basic_salary(class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}
+                            {% if form.basic_salary.errors %}
+                                <div class="text-red-500 text-sm mt-1">
+                                    {% for error in form.basic_salary.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div>
+                            {{ form.allowances.label(class="block text-sm font-medium text-gray-700") }}
+                            {{ form.allowances(class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}
+                            {% if form.allowances.errors %}
+                                <div class="text-red-500 text-sm mt-1">
+                                    {% for error in form.allowances.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div>
+                            {{ form.overtime_pay.label(class="block text-sm font-medium text-gray-700") }}
+                            {{ form.overtime_pay(class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}
+                            {% if form.overtime_pay.errors %}
+                                <div class="text-red-500 text-sm mt-1">
+                                    {% for error in form.overtime_pay.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deductions -->
+                <div class="pb-6">
+                    <h4 class="text-md font-medium text-gray-900 mb-4">Deductions</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div>
+                            {{ form.tax_deduction.label(class="block text-sm font-medium text-gray-700") }}
+                            {{ form.tax_deduction(class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}
+                            {% if form.tax_deduction.errors %}
+                                <div class="text-red-500 text-sm mt-1">
+                                    {% for error in form.tax_deduction.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div>
+                            {{ form.pension_deduction.label(class="block text-sm font-medium text-gray-700") }}
+                            {{ form.pension_deduction(class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}
+                            {% if form.pension_deduction.errors %}
+                                <div class="text-red-500 text-sm mt-1">
+                                    {% for error in form.pension_deduction.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div>
+                            {{ form.loan_deduction.label(class="block text-sm font-medium text-gray-700") }}
+                            {{ form.loan_deduction(class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}
+                            {% if form.loan_deduction.errors %}
+                                <div class="text-red-500 text-sm mt-1">
+                                    {% for error in form.loan_deduction.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div>
+                            {{ form.other_deductions.label(class="block text-sm font-medium text-gray-700") }}
+                            {{ form.other_deductions(class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}
+                            {% if form.other_deductions.errors %}
+                                <div class="text-red-500 text-sm mt-1">
+                                    {% for error in form.other_deductions.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex justify-end space-x-3">
+                    <a href="{{ url_for('payroll.index') }}" 
+                       class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Cancel
+                    </a>
+                    {{ form.submit(class="bg-indigo-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
