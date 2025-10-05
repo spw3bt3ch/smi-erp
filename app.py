@@ -158,6 +158,15 @@ def create_app():
                 "error": str(e)
             }, 500
     
+    # Redirect routes for better UX
+    @app.route('/attendance')
+    def attendance_redirect():
+        return redirect(url_for('admin.attendance'))
+    
+    @app.route('/dashboard')
+    def dashboard_redirect():
+        return redirect(url_for('admin.dashboard'))
+    
     # Homepage route
     @app.route('/')
     def home():
