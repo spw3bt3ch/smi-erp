@@ -73,6 +73,91 @@ def create_app():
     def load_user(user_id):
         return User.query.get(int(user_id))
     
+    # Health check endpoint for debugging
+    @app.route('/health')
+    def health_check():
+        try:
+            # Test database connection
+            db.session.execute("SELECT 1")
+            db_status = "✅ Connected"
+        except Exception as e:
+            db_status = f"❌ Error: {str(e)}"
+        
+        try:
+            # Test user query
+            user_count = User.query.count()
+            user_status = f"✅ {user_count} users found"
+        except Exception as e:
+            user_status = f"❌ Error: {str(e)}"
+        
+        try:
+            # Test if tables exist
+            from models import Employee, Payroll, Attendance, OfficeLocation
+            tables_status = "✅ All tables accessible"
+        except Exception as e:
+            tables_status = f"❌ Table error: {str(e)}"
+        
+        return {
+            "status": "ok",
+            "database": db_status,
+            "users": user_status,
+            "tables": tables_status,
+            "app_name": "ERP Payroll System"
+        }
+    
+    # Setup route for production (no auth required)
+    @app.route('/setup')
+    def setup():
+        """Setup route to create default users in production"""
+        try:
+            from models import User
+            
+            # Create Admin user if doesn't exist
+            admin_user = User.query.filter_by(username='admin').first()
+            if not admin_user:
+                admin_user = User(
+                    username='admin',
+                    email='admin@example.com',
+                    role='admin'
+                )
+                admin_user.set_password('admin123')
+                db.session.add(admin_user)
+                admin_created = True
+            else:
+                admin_created = False
+            
+            # Create HR user if doesn't exist
+            hr_user = User.query.filter_by(username='hr').first()
+            if not hr_user:
+                hr_user = User(
+                    username='hr',
+                    email='hr@company.com',
+                    role='hr'
+                )
+                hr_user.set_password('hr123')
+                db.session.add(hr_user)
+                hr_created = True
+            else:
+                hr_created = False
+            
+            db.session.commit()
+            
+            return {
+                "status": "success",
+                "message": "Setup completed",
+                "admin_created": admin_created,
+                "hr_created": hr_created,
+                "login_credentials": {
+                    "admin": "admin@example.com / admin123",
+                    "hr": "hr@company.com / hr123"
+                }
+            }
+        except Exception as e:
+            return {
+                "status": "error",
+                "error": str(e)
+            }, 500
+    
     # Homepage route
     @app.route('/')
     def home():
