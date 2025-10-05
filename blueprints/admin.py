@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from models import User, Employee, Payroll, Attendance, OfficeLocation, db
 from datetime import datetime, date, timedelta
 from sqlalchemy import func, extract
+import traceback
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -127,6 +128,45 @@ def create_users():
     except Exception as e:
         flash(f'Error creating users: {str(e)}', 'error')
         return redirect(url_for('admin.dashboard'))
+
+@admin_bp.route('/test')
+def test():
+    """Simple test route without authentication"""
+    return jsonify({
+        "status": "ok",
+        "message": "Admin blueprint is working",
+        "current_user_authenticated": current_user.is_authenticated if hasattr(current_user, 'is_authenticated') else False
+    })
+
+@admin_bp.route('/debug')
+def debug():
+    """Debug endpoint to check admin dashboard issues"""
+    try:
+        from models import User, Employee, Payroll, Attendance, OfficeLocation
+        
+        debug_info = {
+            "status": "ok",
+            "current_user": {
+                "authenticated": current_user.is_authenticated if hasattr(current_user, 'is_authenticated') else False,
+                "username": getattr(current_user, 'username', 'None'),
+                "role": getattr(current_user, 'role', 'None')
+            },
+            "database": {
+                "users_count": User.query.count(),
+                "employees_count": Employee.query.count(),
+                "payrolls_count": Payroll.query.count(),
+                "attendance_count": Attendance.query.count(),
+                "office_locations_count": OfficeLocation.query.count()
+            }
+        }
+        
+        return jsonify(debug_info)
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "error": str(e),
+            "traceback": str(traceback.format_exc())
+        }), 500
 
 @admin_bp.route('/reports')
 @login_required
