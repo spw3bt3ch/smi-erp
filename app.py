@@ -9,8 +9,8 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# Import db from models
-from models import db
+# Import db and models
+from models import db, User
 
 # Initialize extensions
 migrate = Migrate()
@@ -60,8 +60,8 @@ def create_app():
     def inject_csrf_token():
         return dict(csrf_token=generate_csrf)
     
-    # Import models
-    from models import User, Employee, Payroll, Attendance, Department
+    # Import additional models
+    from models import Employee, Payroll, Attendance, Department
     
     # Configure login manager
     login_manager.login_view = 'auth.login'
