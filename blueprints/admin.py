@@ -9,75 +9,124 @@ admin_bp = Blueprint('admin', __name__)
 @admin_bp.route('/dashboard')
 @login_required
 def dashboard():
-    # Get basic statistics
-    total_employees = Employee.query.filter_by(is_active=True).count()
-    total_users = User.query.count()
+    try:
+        # Get basic statistics
+        total_employees = Employee.query.filter_by(is_active=True).count()
+        total_users = User.query.count()
+        
+        # Get payroll statistics
+        total_payrolls = Payroll.query.count()
+        processed_payrolls = Payroll.query.filter_by(status='processed').count()
+        pending_payrolls = Payroll.query.filter_by(status='pending').count()
+        
+        # Get salary statistics
+        total_salary_payout = db.session.query(func.sum(Payroll.net_salary)).filter_by(status='processed').scalar() or 0
+        
+        # Get recent payrolls
+        recent_payrolls = Payroll.query.join(Employee).order_by(db.desc('created_at')).limit(5).all()
+        
+        # Get department statistics
+        dept_stats = db.session.query(
+            Employee.department,
+            func.count(Employee.id).label('count'),
+            func.avg(Employee.salary).label('avg_salary')
+        ).filter_by(is_active=True).group_by(Employee.department).all()
+        
+        # Convert to list of dictionaries for JSON serialization
+        dept_stats = [{'department': dept.department, 'count': dept.count, 'avg_salary': float(dept.avg_salary)} for dept in dept_stats]
+        
+        # Get monthly payroll trends (last 6 months)
+        six_months_ago = date.today() - timedelta(days=180)
+        monthly_trends = db.session.query(
+            extract('year', Payroll.pay_period_start).label('year'),
+            extract('month', Payroll.pay_period_start).label('month'),
+            func.count(Payroll.id).label('count'),
+            func.sum(Payroll.net_salary).label('total_salary')
+        ).filter(
+            Payroll.pay_period_start >= six_months_ago,
+            Payroll.status == 'processed'
+        ).group_by(
+            extract('year', Payroll.pay_period_start),
+            extract('month', Payroll.pay_period_start)
+        ).order_by(
+            extract('year', Payroll.pay_period_start),
+            extract('month', Payroll.pay_period_start)
+        ).all()
+        
+        # Convert to list of dictionaries for JSON serialization
+        monthly_trends = [{'year': int(trend.year), 'month': int(trend.month), 'count': trend.count, 'total_salary': float(trend.total_salary)} for trend in monthly_trends]
+        
+        # Get attendance statistics for today
+        today_attendance = Attendance.query.filter_by(date=date.today()).count()
+        today_present = Attendance.query.filter_by(date=date.today(), status='present').count()
+        today_absent = Attendance.query.filter_by(date=date.today(), status='absent').count()
+        
+        # Get office locations
+        office_locations = OfficeLocation.query.filter_by(active=True).all()
+        
+        stats = {
+            'total_employees': total_employees,
+            'total_users': total_users,
+            'total_payrolls': total_payrolls,
+            'processed_payrolls': processed_payrolls,
+            'pending_payrolls': pending_payrolls,
+            'total_salary_payout': float(total_salary_payout),
+            'dept_stats': dept_stats,
+            'monthly_trends': monthly_trends,
+            'today_attendance': today_attendance,
+            'today_present': today_present,
+            'today_absent': today_absent
+        }
     
-    # Get payroll statistics
-    total_payrolls = Payroll.query.count()
-    processed_payrolls = Payroll.query.filter_by(status='processed').count()
-    pending_payrolls = Payroll.query.filter_by(status='pending').count()
-    
-    # Get salary statistics
-    total_salary_payout = db.session.query(func.sum(Payroll.net_salary)).filter_by(status='processed').scalar() or 0
-    
-    # Get recent payrolls
-    recent_payrolls = Payroll.query.join(Employee).order_by(db.desc('created_at')).limit(5).all()
-    
-    # Get department statistics
-    dept_stats = db.session.query(
-        Employee.department,
-        func.count(Employee.id).label('count'),
-        func.avg(Employee.salary).label('avg_salary')
-    ).filter_by(is_active=True).group_by(Employee.department).all()
-    
-    # Convert to list of dictionaries for JSON serialization
-    dept_stats = [{'department': dept.department, 'count': dept.count, 'avg_salary': float(dept.avg_salary)} for dept in dept_stats]
-    
-    # Get monthly payroll trends (last 6 months)
-    six_months_ago = date.today() - timedelta(days=180)
-    monthly_trends = db.session.query(
-        extract('year', Payroll.pay_period_start).label('year'),
-        extract('month', Payroll.pay_period_start).label('month'),
-        func.count(Payroll.id).label('count'),
-        func.sum(Payroll.net_salary).label('total_salary')
-    ).filter(
-        Payroll.pay_period_start >= six_months_ago,
-        Payroll.status == 'processed'
-    ).group_by(
-        extract('year', Payroll.pay_period_start),
-        extract('month', Payroll.pay_period_start)
-    ).order_by(
-        extract('year', Payroll.pay_period_start),
-        extract('month', Payroll.pay_period_start)
-    ).all()
-    
-    # Convert to list of dictionaries for JSON serialization
-    monthly_trends = [{'year': int(trend.year), 'month': int(trend.month), 'count': trend.count, 'total_salary': float(trend.total_salary)} for trend in monthly_trends]
-    
-    # Get attendance statistics for today
-    today_attendance = Attendance.query.filter_by(date=date.today()).count()
-    today_present = Attendance.query.filter_by(date=date.today(), status='present').count()
-    today_absent = Attendance.query.filter_by(date=date.today(), status='absent').count()
-    
-    # Get office locations
-    office_locations = OfficeLocation.query.filter_by(active=True).all()
-    
-    stats = {
-        'total_employees': total_employees,
-        'total_users': total_users,
-        'total_payrolls': total_payrolls,
-        'processed_payrolls': processed_payrolls,
-        'pending_payrolls': pending_payrolls,
-        'total_salary_payout': float(total_salary_payout),
-        'dept_stats': dept_stats,
-        'monthly_trends': monthly_trends,
-        'today_attendance': today_attendance,
-        'today_present': today_present,
-        'today_absent': today_absent
-    }
-    
-    return render_template('admin/dashboard.html', stats=stats, recent_payrolls=recent_payrolls, office_locations=office_locations)
+        return render_template('admin/dashboard.html', stats=stats, recent_payrolls=recent_payrolls, office_locations=office_locations)
+    except Exception as e:
+        print(f"Dashboard error: {e}")
+        import traceback
+        traceback.print_exc()
+        flash('An error occurred while loading the dashboard. Please try again.', 'error')
+        return render_template('admin/dashboard.html', stats={}, recent_payrolls=[], office_locations=[])
+
+@admin_bp.route('/create-users')
+@login_required
+def create_users():
+    """Create default users if they don't exist (for production setup)"""
+    try:
+        from models import User
+        
+        # Create Admin user if doesn't exist
+        admin_user = User.query.filter_by(username='admin').first()
+        if not admin_user:
+            admin_user = User(
+                username='admin',
+                email='admin@example.com',
+                role='admin'
+            )
+            admin_user.set_password('admin123')
+            db.session.add(admin_user)
+            flash('Admin user created successfully!', 'success')
+        else:
+            flash('Admin user already exists', 'info')
+        
+        # Create HR user if doesn't exist
+        hr_user = User.query.filter_by(username='hr').first()
+        if not hr_user:
+            hr_user = User(
+                username='hr',
+                email='hr@company.com',
+                role='hr'
+            )
+            hr_user.set_password('hr123')
+            db.session.add(hr_user)
+            flash('HR user created successfully!', 'success')
+        else:
+            flash('HR user already exists', 'info')
+        
+        db.session.commit()
+        return redirect(url_for('admin.dashboard'))
+        
+    except Exception as e:
+        flash(f'Error creating users: {str(e)}', 'error')
+        return redirect(url_for('admin.dashboard'))
 
 @admin_bp.route('/reports')
 @login_required

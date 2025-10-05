@@ -48,28 +48,35 @@ def generate_password():
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('admin.dashboard'))
-    
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+    try:
+        if current_user.is_authenticated:
+            return redirect(url_for('admin.dashboard'))
         
-        if user and user.check_password(form.password.data):
-            login_user(user, remember=form.remember_me.data)
-            user.last_login = datetime.utcnow()
-            db.session.commit()
+        form = LoginForm()
+        if form.validate_on_submit():
+            user = User.query.filter_by(email=form.email.data).first()
             
-            next_page = request.args.get('next')
-            if not next_page or not next_page.startswith('/'):
-                next_page = url_for('admin.dashboard')
-            
-            flash('Login successful!', 'success')
-            return redirect(next_page)
-        else:
-            flash('Invalid email or password', 'error')
-    
-    return render_template('auth/login.html', form=form)
+            if user and user.check_password(form.password.data):
+                login_user(user, remember=form.remember_me.data)
+                user.last_login = datetime.utcnow()
+                db.session.commit()
+                
+                next_page = request.args.get('next')
+                if not next_page or not next_page.startswith('/'):
+                    next_page = url_for('admin.dashboard')
+                
+                flash('Login successful!', 'success')
+                return redirect(next_page)
+            else:
+                flash('Invalid email or password', 'error')
+        
+        return render_template('auth/login.html', form=form)
+    except Exception as e:
+        print(f"Login error: {e}")
+        import traceback
+        traceback.print_exc()
+        flash('An error occurred during login. Please try again.', 'error')
+        return render_template('auth/login.html', form=form)
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 @login_required
