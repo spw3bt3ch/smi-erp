@@ -2,94 +2,198 @@
 
 {% block title %}QR Code Attendance - ERP Payroll System{% endblock %}
 
+{% block extra_css %}
+<!-- Professional QR Attendance Styles -->
+<style>
+    /* Custom professional animations */
+    @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
+        50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8); }
+    }
+    
+    .pulse-glow {
+        animation: pulse-glow 2s infinite;
+    }
+    
+    /* Professional hover effects */
+    .hover-lift:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    /* Smooth camera transitions */
+    .camera-transition {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="max-w-4xl mx-auto">
-    <!-- QR Scanner Interface -->
-    <div class="bg-white shadow-lg rounded-lg p-8 mb-6">
-        <div class="text-center">
-            <h2 class="text-3xl font-bold text-gray-900 mb-2">QR Code Attendance</h2>
-            <p class="text-gray-600 mb-6">Scan QR code at your office location to clock in/out</p>
-            
-            <!-- Current Time Display -->
-            <div class="bg-indigo-50 rounded-lg p-6 mb-6">
-                <div class="text-5xl font-bold text-indigo-600" id="current-time">--:--:--</div>
-                <div class="text-sm text-gray-600 mt-2">Current Time</div>
+<!-- Professional QR Attendance Page -->
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+        
+        <!-- Header Section -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mb-4">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+                </svg>
             </div>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+                QR Code Attendance
+            </h1>
+            <p class="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
+                Scan QR code at your office location to clock in/out automatically
+            </p>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
             
-            <!-- QR Scanner Area -->
-            <div class="bg-gray-50 rounded-lg p-8 mb-6">
-                <div class="mb-4">
-                    <svg class="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-lg font-medium text-gray-900 mb-2">Scan QR Code</h3>
-                <p class="text-gray-600 mb-4">Use your camera to scan the QR code displayed at your office location. The system will automatically clock you in or out based on your current status.</p>
+            <!-- Left Column - Scanner -->
+            <div class="lg:col-span-2 space-y-6">
                 
-                <!-- Camera Scanner -->
-                <div class="relative">
-                    <div id="camera-container" class="hidden">
-                        <video id="camera-video" autoplay playsinline class="w-full h-64 bg-black rounded-lg"></video>
-                        <canvas id="qr-canvas" class="hidden"></canvas>
-                        <div class="mt-4 flex justify-center space-x-2">
-                            <button onclick="stopCamera()" 
-                                    class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
-                                Stop Camera
+                <!-- Current Time Card -->
+                <div class="bg-white rounded-2xl shadow-xl p-6 lg:p-8 hover-lift">
+                    <div class="text-center">
+                        <div class="inline-flex items-center justify-center w-12 h-12 bg-indigo-100 rounded-full mb-4">
+                            <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Current Time</h3>
+                        <div class="text-4xl sm:text-5xl lg:text-6xl font-bold text-indigo-600 mb-2" id="current-time">--:--:--</div>
+                        <p class="text-sm text-gray-500">Real-time clock synchronization</p>
+                    </div>
+                </div>
+
+                <!-- QR Scanner Card -->
+                <div class="bg-white rounded-2xl shadow-xl p-6 lg:p-8 hover-lift">
+                    <div class="text-center mb-6">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full mb-4 pulse-glow">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">QR Code Scanner</h3>
+                        <p class="text-gray-600 mb-6">Use your camera to scan the QR code displayed at your office location</p>
+                    </div>
+
+                    <!-- Camera Scanner -->
+                    <div class="space-y-4">
+                        <div id="camera-container" class="hidden camera-transition">
+                            <div class="relative bg-gray-900 rounded-xl overflow-hidden">
+                                <video id="camera-video" autoplay playsinline class="w-full h-64 sm:h-80 lg:h-96 object-cover"></video>
+                                <div class="absolute inset-0 border-4 border-green-400 rounded-xl pointer-events-none"></div>
+                            </div>
+                            <canvas id="qr-canvas" class="hidden"></canvas>
+                            <div class="flex justify-center mt-4">
+                                <button onclick="stopCamera()" class="inline-flex items-center px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors duration-200">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    Stop Camera
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="camera-controls">
+                            <button onclick="startCamera()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 hover-lift">
+                                <div class="flex items-center justify-center space-x-3">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    <span class="hidden sm:inline">Start Camera & Scan QR Code</span>
+                                    <span class="sm:hidden">Start Camera</span>
+                                </div>
                             </button>
                         </div>
                     </div>
-                    
-                    <div id="camera-controls">
-                        <button onclick="startCamera()" 
-                                class="w-full bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </div>
+
+                <!-- Current Status -->
+                <div id="current-status" class="bg-white rounded-2xl shadow-xl p-6 lg:p-8 hover-lift">
+                    <!-- Status will be loaded here -->
+                </div>
+
+            </div>
+
+            <!-- Right Column - Info & History -->
+            <div class="space-y-6">
+                
+                <!-- How It Works Card -->
+                <div class="bg-white rounded-2xl shadow-xl p-6 hover-lift">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                            Scan QR Code (Auto Clock In/Out)
-                        </button>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900">How It Works</h3>
+                    </div>
+                    <div class="space-y-3 text-sm text-gray-600">
+                        <div class="flex items-start">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                            <p><span class="font-medium">Clock In:</span> If you haven't clocked in today, scanning will clock you in</p>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                            <p><span class="font-medium">Clock Out:</span> If you're already clocked in, scanning will clock you out</p>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                            <p><span class="font-medium">Automatic:</span> System detects your status and performs the correct action</p>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                            <p><span class="font-medium">Location:</span> Must scan QR code at your office location</p>
+                        </div>
                     </div>
                 </div>
-                
-            </div>
-            
-            <!-- Current Status -->
-            <div id="current-status" class="mb-6">
-                <!-- Status will be loaded here -->
-            </div>
-            
-            <!-- How It Works -->
-            <div class="bg-green-50 rounded-lg p-4 mb-6">
-                <h4 class="text-sm font-medium text-green-900 mb-2">How QR Clock In/Out Works</h4>
-                <div class="text-sm text-green-700 space-y-1">
-                    <p><strong>• Clock In:</strong> If you haven't clocked in today, scanning will clock you in</p>
-                    <p><strong>• Clock Out:</strong> If you're already clocked in, scanning will clock you out</p>
-                    <p><strong>• Automatic:</strong> System detects your status and performs the correct action</p>
-                    <p><strong>• Location:</strong> Must scan QR code at your office location</p>
+
+                <!-- Office Locations Card -->
+                <div class="bg-white rounded-2xl shadow-xl p-6 hover-lift">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900">Office Locations</h3>
+                    </div>
+                    <div class="space-y-3">
+                        {% if office_locations %}
+                            {% for loc in office_locations %}
+                            <div class="p-3 bg-gray-50 rounded-lg">
+                                <p class="font-medium text-gray-900 text-sm">{{ loc.name }}</p>
+                                <p class="text-xs text-gray-600 mt-1">{{ loc.address }}</p>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-sm text-gray-500 italic">No office locations configured yet. Please contact your administrator.</p>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
-            
-            <!-- Location Info -->
-            <div class="bg-blue-50 rounded-lg p-4 mb-6">
-                <h4 class="text-sm font-medium text-blue-900 mb-2">Office Locations</h4>
-                <div class="text-sm text-blue-700 space-y-1">
-                    {% if office_locations %}
-                        {% for loc in office_locations %}
-                        <p><strong>{{ loc.name }}:</strong> {{ loc.address }}</p>
-                        {% endfor %}
-                    {% else %}
-                        <p class="text-blue-700">No office locations configured yet. Please contact your administrator.</p>
-                    {% endif %}
+
+                <!-- Recent Attendance History -->
+                <div class="bg-white rounded-2xl shadow-xl p-6 hover-lift">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900">Recent Attendance</h3>
+                    </div>
+                    <div id="attendance-history" class="space-y-2">
+                        <!-- History will be loaded here -->
+                    </div>
                 </div>
+
             </div>
-        </div>
-    </div>
-    
-    <!-- Recent Attendance History -->
-    <div class="bg-white shadow rounded-lg p-6">
-        <h3 class="text-lg font-medium text-gray-900 mb-4">Recent QR Attendance</h3>
-        <div id="attendance-history">
-            <!-- History will be loaded here -->
         </div>
     </div>
 </div>
@@ -257,50 +361,62 @@ function loadCurrentStatus() {
         
         if (data.clocked_in && !data.clocked_out) {
             statusDiv.innerHTML = `
-                <div class="bg-green-50 rounded-lg p-4">
-                    <div class="flex items-center">
-                        <svg class="w-5 h-5 text-green-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                <div class="text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        <div>
-                            <div class="text-sm font-medium text-green-800">Currently Clocked In</div>
-                            <div class="text-sm text-green-600">Since: ${data.check_in_time}</div>
-                        </div>
                     </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Currently Clocked In</h3>
+                    <p class="text-green-600 font-medium">You are actively working</p>
+                    <p class="text-sm text-gray-500 mt-2">Since: ${data.check_in_time}</p>
+                    <p class="text-sm text-gray-500">Scan QR code to clock out</p>
                 </div>
             `;
         } else if (data.clocked_out) {
             statusDiv.innerHTML = `
-                <div class="bg-blue-50 rounded-lg p-4">
-                    <div class="flex items-center">
-                        <svg class="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                <div class="text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        <div>
-                            <div class="text-sm font-medium text-blue-800">Clocked Out</div>
-                            <div class="text-sm text-blue-600">At: ${data.check_out_time}</div>
-                        </div>
                     </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Clocked Out</h3>
+                    <p class="text-blue-600 font-medium">Work session completed</p>
+                    <p class="text-sm text-gray-500 mt-2">At: ${data.check_out_time}</p>
+                    <p class="text-sm text-gray-500">Scan QR code to clock in</p>
                 </div>
             `;
         } else {
             statusDiv.innerHTML = `
-                <div class="bg-gray-50 rounded-lg p-4">
-                    <div class="flex items-center">
-                        <svg class="w-5 h-5 text-gray-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                <div class="text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        <div>
-                            <div class="text-sm font-medium text-gray-800">Not Clocked In</div>
-                            <div class="text-sm text-gray-600">Scan QR code to clock in</div>
-                        </div>
                     </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Not Clocked In</h3>
+                    <p class="text-gray-500 font-medium">Ready to start work</p>
+                    <p class="text-sm text-gray-500 mt-2">Scan QR code to clock in</p>
                 </div>
             `;
         }
     })
     .catch(error => {
         console.error('Error loading status:', error);
+        const statusDiv = document.getElementById('current-status');
+        statusDiv.innerHTML = `
+            <div class="text-center">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
+                    <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Status Unknown</h3>
+                <p class="text-red-500 font-medium">Unable to load status</p>
+                <p class="text-sm text-gray-500 mt-2">Please refresh the page</p>
+            </div>
+        `;
     });
 }
 
@@ -318,40 +434,71 @@ function loadAttendanceHistory() {
             const history = data.attendance_history;
             
             if (history.length === 0) {
-                historyDiv.innerHTML = '<p class="text-gray-500 text-center">No attendance records found</p>';
+                historyDiv.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="inline-flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full mb-4">
+                            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                            </svg>
+                        </div>
+                        <p class="text-gray-500 text-sm">No attendance records found</p>
+                    </div>
+                `;
                 return;
             }
             
-            let html = '<div class="overflow-x-auto"><table class="min-w-full divide-y divide-gray-200">';
-            html += '<thead class="bg-gray-50"><tr>';
-            html += '<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>';
-            html += '<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check In</th>';
-            html += '<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check Out</th>';
-            html += '<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hours</th>';
-            html += '<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>';
-            html += '</tr></thead><tbody class="bg-white divide-y divide-gray-200">';
-            
-            history.forEach(att => {
-                html += '<tr class="hover:bg-gray-50">';
-                html += `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${att.date}</td>`;
-                html += `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${att.check_in || '-'}</td>`;
-                html += `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${att.check_out || '-'}</td>`;
-                html += `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${att.hours_worked.toFixed(2)}h</td>`;
-                html += `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">`;
-                if (att.is_qr_attendance) {
-                    html += '<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">QR Code</span>';
-                } else {
-                    html += '<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Manual</span>';
-                }
-                html += '</td></tr>';
+            let html = '';
+            history.slice(0, 5).forEach(att => {
+                html += `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center space-x-2">
+                                <p class="text-sm font-medium text-gray-900 truncate">${att.date}</p>
+                                ${att.is_qr_attendance ? 
+                                    '<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">QR</span>' : 
+                                    '<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Manual</span>'
+                                }
+                            </div>
+                            <div class="flex items-center space-x-4 mt-1">
+                                <div class="text-xs text-gray-600">
+                                    <span class="font-medium">In:</span> ${att.check_in || '-'}
+                                </div>
+                                <div class="text-xs text-gray-600">
+                                    <span class="font-medium">Out:</span> ${att.check_out || '-'}
+                                </div>
+                                <div class="text-xs font-medium text-blue-600">
+                                    ${att.hours_worked.toFixed(1)}h
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
             });
             
-            html += '</tbody></table></div>';
+            if (history.length > 5) {
+                html += `
+                    <div class="text-center pt-2">
+                        <p class="text-xs text-gray-500">Showing 5 of ${history.length} records</p>
+                    </div>
+                `;
+            }
+            
             historyDiv.innerHTML = html;
         }
     })
     .catch(error => {
         console.error('Error loading history:', error);
+        const historyDiv = document.getElementById('attendance-history');
+        historyDiv.innerHTML = `
+            <div class="text-center py-8">
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-red-100 rounded-full mb-4">
+                    <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <p class="text-red-500 text-sm">Error loading attendance history</p>
+            </div>
+        `;
     });
 }
 

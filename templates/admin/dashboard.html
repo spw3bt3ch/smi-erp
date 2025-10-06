@@ -3,179 +3,186 @@
 {% block title %}Dashboard - ERP Payroll System{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-    <div class="space-y-8 p-6">
+<!-- Professional Dashboard -->
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+        <div class="space-y-6 lg:space-y-8">
         <!-- Page Header -->
-        <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 border border-gray-100">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-                <div class="flex items-center space-x-3 sm:space-x-4">
-                    <div class="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="bg-white rounded-2xl shadow-xl p-6 lg:p-8 hover-lift">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+                <div class="flex items-center space-x-4">
+                    <div class="w-16 h-16 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                         </svg>
                     </div>
                     <div>
-                        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 sm:mb-2">
+                        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-2">
                             Welcome back, {{ current_user.username }}!
                         </h1>
-                        <p class="text-sm sm:text-base lg:text-xl text-gray-600">
+                        <p class="text-lg sm:text-xl text-gray-600">
                             Here's what's happening with your payroll system today
                         </p>
                     </div>
                 </div>
-                <div class="text-left sm:text-right">
-                    <div class="text-xs sm:text-sm text-gray-500">Last updated</div>
-                    <div class="text-sm sm:text-base lg:text-lg font-semibold text-gray-900" id="current-time"></div>
+                <div class="text-center lg:text-right">
+                    <div class="inline-flex items-center justify-center w-12 h-12 bg-indigo-100 rounded-full mb-2">
+                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="text-sm text-gray-500 mb-1">Last updated</div>
+                    <div class="text-xl sm:text-2xl font-bold text-indigo-600" id="current-time"></div>
                 </div>
             </div>
         </div>
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
             <!-- Total Employees Card -->
-            <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-xl p-4 sm:p-6 text-white transform hover:scale-105 transition-all duration-200">
-                <div class="flex items-center justify-between">
-                    <div class="flex-1 min-w-0">
-                        <p class="text-blue-100 text-xs sm:text-sm font-medium">Total Employees</p>
-                        <p class="text-2xl sm:text-3xl font-bold">{{ stats.total_employees }}</p>
-                        <p class="text-blue-200 text-xs mt-1">Active workforce</p>
-                    </div>
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-lg p-3 sm:p-4 text-white hover-lift">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
+                    <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center mb-2 sm:mb-0">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
                         </svg>
                     </div>
+                    <div class="text-left sm:text-right">
+                        <p class="text-blue-100 text-xs font-medium">Total Employees</p>
+                        <p class="text-xl sm:text-2xl font-bold">{{ stats.total_employees }}</p>
+                    </div>
                 </div>
+                <p class="text-blue-200 text-xs">Active workforce</p>
             </div>
 
             <!-- Processed Payrolls Card -->
-            <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl shadow-xl p-4 sm:p-6 text-white transform hover:scale-105 transition-all duration-200">
-                <div class="flex items-center justify-between">
-                    <div class="flex-1 min-w-0">
-                        <p class="text-green-100 text-xs sm:text-sm font-medium">Processed Payrolls</p>
-                        <p class="text-2xl sm:text-3xl font-bold">{{ stats.processed_payrolls }}</p>
-                        <p class="text-green-200 text-xs mt-1">This month</p>
-                    </div>
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-lg p-3 sm:p-4 text-white hover-lift">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
+                    <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center mb-2 sm:mb-0">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
+                    <div class="text-left sm:text-right">
+                        <p class="text-green-100 text-xs font-medium">Processed Payrolls</p>
+                        <p class="text-xl sm:text-2xl font-bold">{{ stats.processed_payrolls }}</p>
+                    </div>
                 </div>
+                <p class="text-green-200 text-xs">This month</p>
             </div>
 
             <!-- Pending Payrolls Card -->
-            <div class="bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl shadow-xl p-4 sm:p-6 text-white transform hover:scale-105 transition-all duration-200">
-                <div class="flex items-center justify-between">
-                    <div class="flex-1 min-w-0">
-                        <p class="text-yellow-100 text-xs sm:text-sm font-medium">Pending Payrolls</p>
-                        <p class="text-2xl sm:text-3xl font-bold">{{ stats.pending_payrolls }}</p>
-                        <p class="text-yellow-200 text-xs mt-1">Awaiting processing</p>
-                    </div>
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-gradient-to-br from-yellow-500 to-orange-500 rounded-lg shadow-lg p-3 sm:p-4 text-white hover-lift">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
+                    <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center mb-2 sm:mb-0">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
+                    <div class="text-left sm:text-right">
+                        <p class="text-yellow-100 text-xs font-medium">Pending Payrolls</p>
+                        <p class="text-xl sm:text-2xl font-bold">{{ stats.pending_payrolls }}</p>
+                    </div>
                 </div>
+                <p class="text-yellow-200 text-xs">Awaiting processing</p>
             </div>
 
             <!-- Total Salary Payout Card -->
-            <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl shadow-xl p-4 sm:p-6 text-white transform hover:scale-105 transition-all duration-200">
-                <div class="flex items-center justify-between">
-                    <div class="flex-1 min-w-0">
-                        <p class="text-purple-100 text-xs sm:text-sm font-medium">Total Salary Payout</p>
-                        <p class="text-lg sm:text-2xl lg:text-3xl font-bold">${{ "{:,.0f}".format(stats.total_salary_payout) }}</p>
-                        <p class="text-purple-200 text-xs mt-1">This month</p>
-                    </div>
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow-lg p-3 sm:p-4 text-white hover-lift">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
+                    <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center mb-2 sm:mb-0">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
                         </svg>
                     </div>
+                    <div class="text-left sm:text-right">
+                        <p class="text-purple-100 text-xs font-medium">Total Salary Payout</p>
+                        <p class="text-lg sm:text-xl font-bold">${{ "{:,.0f}".format(stats.total_salary_payout) }}</p>
+                    </div>
                 </div>
+                <p class="text-purple-200 text-xs">This month</p>
             </div>
         </div>
 
         <!-- Charts Row -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
             <!-- Monthly Payroll Trends -->
-            <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 border border-gray-100">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 space-y-2 sm:space-y-0">
-                    <div>
-                        <h3 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">Monthly Payroll Trends</h3>
-                        <p class="text-sm sm:text-base text-gray-600 mt-1">Payroll processing over time</p>
+            <div class="bg-white rounded-lg shadow-lg p-3 sm:p-4 hover-lift">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
+                    <div class="mb-2 sm:mb-0">
+                        <h3 class="text-base sm:text-lg font-bold text-gray-900">Monthly Payroll Trends</h3>
+                        <p class="text-xs sm:text-sm text-gray-600">Payroll processing over time</p>
                     </div>
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                         </svg>
                     </div>
                 </div>
-                <div class="h-64 sm:h-72 lg:h-80">
+                <div class="h-40 sm:h-48 lg:h-64">
                     <canvas id="payrollChart" width="400" height="200"></canvas>
                 </div>
             </div>
 
             <!-- Department Distribution -->
-            <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 border border-gray-100">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 space-y-2 sm:space-y-0">
-                    <div>
-                        <h3 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">Department Distribution</h3>
-                        <p class="text-sm sm:text-base text-gray-600 mt-1">Employee distribution by department</p>
+            <div class="bg-white rounded-lg shadow-lg p-3 sm:p-4 hover-lift">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
+                    <div class="mb-2 sm:mb-0">
+                        <h3 class="text-base sm:text-lg font-bold text-gray-900">Department Distribution</h3>
+                        <p class="text-xs sm:text-sm text-gray-600">Employee distribution by department</p>
                     </div>
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                         </svg>
                     </div>
                 </div>
-                <div class="h-64 sm:h-72 lg:h-80">
+                <div class="h-40 sm:h-48 lg:h-64">
                     <canvas id="departmentChart" width="400" height="200"></canvas>
                 </div>
             </div>
         </div>
 
         <!-- Department Statistics -->
-        <div class="bg-white rounded-2xl shadow-xl border border-gray-100">
-            <div class="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 border-b border-gray-100">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+        <div class="bg-white rounded-xl shadow-lg hover-lift">
+            <div class="px-4 sm:px-6 py-4 border-b border-gray-100">
+                <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">Department Statistics</h3>
-                        <p class="text-sm sm:text-base text-gray-600 mt-1">Employee distribution and salary insights</p>
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-900">Department Statistics</h3>
+                        <p class="text-sm text-gray-600 mt-1">Employee distribution and salary insights</p>
                     </div>
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                         </svg>
                     </div>
                 </div>
             </div>
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto mobile-table">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-4 sm:px-6 lg:px-8 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wider">Department</th>
-                            <th class="px-4 sm:px-6 lg:px-8 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wider">Employees</th>
-                            <th class="px-4 sm:px-6 lg:px-8 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wider">Average Salary</th>
+                            <th class="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wider">Department</th>
+                            <th class="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wider">Employees</th>
+                            <th class="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wider">Average Salary</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         {% for dept in stats.dept_stats %}
                         <tr class="hover:bg-gray-50 transition-colors duration-200">
-                            <td class="px-4 sm:px-6 lg:px-8 py-3 sm:py-4 sm:py-6 whitespace-nowrap">
+                            <td class="px-3 sm:px-4 py-3 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <div class="w-2 h-2 sm:w-3 sm:h-3 bg-indigo-500 rounded-full mr-2 sm:mr-3"></div>
-                                    <span class="text-sm sm:text-base lg:text-lg font-medium text-gray-900">{{ dept.department }}</span>
+                                    <div class="w-2 h-2 bg-indigo-500 rounded-full mr-2"></div>
+                                    <span class="text-sm sm:text-base font-medium text-gray-900">{{ dept.department }}</span>
                                 </div>
                             </td>
-                            <td class="px-4 sm:px-6 lg:px-8 py-3 sm:py-4 sm:py-6 whitespace-nowrap">
-                                <span class="text-sm sm:text-base lg:text-lg font-semibold text-gray-900">{{ dept.count }}</span>
-                                <span class="text-xs sm:text-sm text-gray-500 ml-1">employees</span>
+                            <td class="px-3 sm:px-4 py-3 whitespace-nowrap">
+                                <span class="text-sm sm:text-base font-semibold text-gray-900">{{ dept.count }}</span>
+                                <span class="text-xs text-gray-500 ml-1">employees</span>
                             </td>
-                            <td class="px-4 sm:px-6 lg:px-8 py-3 sm:py-4 sm:py-6 whitespace-nowrap">
-                                <span class="text-sm sm:text-base lg:text-lg font-semibold text-gray-900">${{ "{:,.0f}".format(dept.avg_salary) }}</span>
-                                <span class="text-sm text-gray-500 ml-1">avg</span>
+                            <td class="px-3 sm:px-4 py-3 whitespace-nowrap">
+                                <span class="text-sm sm:text-base font-semibold text-gray-900">${{ "{:,.0f}".format(dept.avg_salary) }}</span>
+                                <span class="text-xs text-gray-500 ml-1">avg</span>
                             </td>
                         </tr>
                         {% endfor %}
@@ -185,69 +192,69 @@
         </div>
 
         <!-- Recent Payrolls -->
-        <div class="bg-white rounded-2xl shadow-xl border border-gray-100">
-            <div class="px-8 py-6 border-b border-gray-100">
+        <div class="bg-white rounded-xl shadow-lg hover-lift">
+            <div class="px-4 sm:px-6 py-4 border-b border-gray-100">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-2xl font-bold text-gray-900">Recent Payrolls</h3>
-                        <p class="text-gray-600 mt-1">Latest payroll processing activity</p>
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-900">Recent Payrolls</h3>
+                        <p class="text-sm text-gray-600 mt-1">Latest payroll processing activity</p>
                     </div>
-                    <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                         </svg>
                     </div>
                 </div>
             </div>
-            <div class="overflow-hidden">
+            <div class="overflow-x-auto mobile-table">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-8 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">Employee</th>
-                            <th class="px-8 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">Pay Period</th>
-                            <th class="px-8 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">Net Salary</th>
-                            <th class="px-8 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">Status</th>
-                            <th class="px-8 py-4 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">Date</th>
+                            <th class="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wider">Employee</th>
+                            <th class="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wider">Pay Period</th>
+                            <th class="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wider">Net Salary</th>
+                            <th class="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wider">Status</th>
+                            <th class="px-3 sm:px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wider">Date</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         {% for payroll in recent_payrolls %}
                         <tr class="hover:bg-gray-50 transition-colors duration-200">
-                            <td class="px-8 py-6 whitespace-nowrap">
+                            <td class="px-3 sm:px-4 py-3 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <div class="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-sm mr-4">
+                                    <div class="w-8 h-8 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-xs mr-3">
                                         {{ payroll.employee.full_name.split()[0][0] }}{{ payroll.employee.full_name.split()[-1][0] }}
                                     </div>
-                                    <div>
-                                        <div class="text-lg font-semibold text-gray-900">{{ payroll.employee.full_name }}</div>
-                                        <div class="text-sm text-gray-500">{{ payroll.employee.employee_id }}</div>
+                                    <div class="min-w-0 flex-1">
+                                        <div class="text-sm sm:text-base font-semibold text-gray-900 truncate">{{ payroll.employee.full_name }}</div>
+                                        <div class="text-xs text-gray-500 truncate">{{ payroll.employee.employee_id }}</div>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-8 py-6 whitespace-nowrap">
-                                <div class="text-lg font-medium text-gray-900">
+                            <td class="px-3 sm:px-4 py-3 whitespace-nowrap">
+                                <div class="text-sm sm:text-base font-medium text-gray-900">
                                     {{ payroll.pay_period_start.strftime('%b %d') }} - {{ payroll.pay_period_end.strftime('%b %d, %Y') }}
                                 </div>
                             </td>
-                            <td class="px-8 py-6 whitespace-nowrap">
-                                <div class="text-lg font-bold text-gray-900">${{ "{:,.0f}".format(payroll.net_salary) }}</div>
+                            <td class="px-3 sm:px-4 py-3 whitespace-nowrap">
+                                <div class="text-sm sm:text-base font-bold text-gray-900">${{ "{:,.0f}".format(payroll.net_salary) }}</div>
                             </td>
-                            <td class="px-8 py-6 whitespace-nowrap">
-                                <span class="inline-flex px-4 py-2 text-sm font-semibold rounded-full 
+                            <td class="px-3 sm:px-4 py-3 whitespace-nowrap">
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full 
                                     {% if payroll.status == 'processed' %}bg-green-100 text-green-800
                                     {% elif payroll.status == 'pending' %}bg-yellow-100 text-yellow-800
                                     {% else %}bg-gray-100 text-gray-800{% endif %}">
                                     {{ payroll.status.title() }}
                                 </span>
                             </td>
-                            <td class="px-8 py-6 whitespace-nowrap">
-                                <div class="text-lg font-medium text-gray-900">{{ payroll.created_at.strftime('%b %d, %Y') }}</div>
+                            <td class="px-3 sm:px-4 py-3 whitespace-nowrap">
+                                <div class="text-sm sm:text-base font-medium text-gray-900">{{ payroll.created_at.strftime('%b %d, %Y') }}</div>
                             </td>
                         </tr>
                         {% else %}
                         <tr>
-                            <td colspan="5" class="px-8 py-12 text-center">
-                                <div class="text-gray-500 text-lg">No recent payrolls found</div>
+                            <td colspan="5" class="px-3 sm:px-4 py-8 text-center">
+                                <div class="text-gray-500 text-sm sm:text-base">No recent payrolls found</div>
                             </td>
                         </tr>
                         {% endfor %}
@@ -257,38 +264,38 @@
         </div>
 
         <!-- Office Locations -->
-        <div class="bg-white rounded-2xl shadow-xl border border-gray-100">
-            <div class="px-8 py-6 border-b border-gray-100">
+        <div class="bg-white rounded-xl shadow-lg hover-lift">
+            <div class="px-4 sm:px-6 py-4 border-b border-gray-100">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-2xl font-bold text-gray-900">Office Locations</h3>
-                        <p class="text-gray-600 mt-1">Available office locations for attendance</p>
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-900">Office Locations</h3>
+                        <p class="text-sm text-gray-600 mt-1">Available office locations for attendance</p>
                     </div>
-                    <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                         </svg>
                     </div>
                 </div>
             </div>
-            <div class="p-8">
+            <div class="p-4 sm:p-6">
                 {% if office_locations %}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                     {% for location in office_locations %}
-                    <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-6 border border-indigo-200">
-                        <div class="flex items-start justify-between mb-4">
-                            <div class="w-12 h-12 bg-indigo-500 rounded-xl flex items-center justify-center">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg p-4 border border-indigo-200 hover-lift">
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                 </svg>
                             </div>
-                            <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
                                 Active
                             </span>
                         </div>
-                        <h4 class="text-lg font-semibold text-gray-900 mb-2">{{ location.name }}</h4>
-                        <p class="text-gray-600 text-sm mb-3">{{ location.address }}</p>
+                        <h4 class="text-base font-semibold text-gray-900 mb-2">{{ location.name }}</h4>
+                        <p class="text-gray-600 text-sm mb-2">{{ location.address }}</p>
                         {% if location.description %}
                         <p class="text-gray-500 text-xs">{{ location.description }}</p>
                         {% endif %}
@@ -296,15 +303,15 @@
                     {% endfor %}
                 </div>
                 {% else %}
-                <div class="text-center py-12">
-                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="text-center py-8">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">No Office Locations</h3>
-                    <p class="text-gray-500">Add office locations to enable QR attendance tracking</p>
+                    <h3 class="text-base font-semibold text-gray-900 mb-2">No Office Locations</h3>
+                    <p class="text-sm text-gray-500">Add office locations to enable QR attendance tracking</p>
                 </div>
                 {% endif %}
             </div>
@@ -312,105 +319,105 @@
 
         <!-- Quick Actions -->
         {% if current_user.role in ['admin', 'hr'] %}
-        <div class="bg-white rounded-2xl shadow-xl border border-gray-100">
-            <div class="px-8 py-6 border-b border-gray-100">
+        <div class="bg-white rounded-xl shadow-lg hover-lift">
+            <div class="px-4 sm:px-6 py-4 border-b border-gray-100">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-2xl font-bold text-gray-900">Quick Actions</h3>
-                        <p class="text-gray-600 mt-1">Common tasks and shortcuts</p>
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-900">Quick Actions</h3>
+                        <p class="text-sm text-gray-600 mt-1">Common tasks and shortcuts</p>
                     </div>
-                    <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                         </svg>
                     </div>
                 </div>
             </div>
-            <div class="p-8">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <a href="{{ url_for('employees.add') }}" class="group bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl p-6 text-white transform hover:scale-105 transition-all duration-200 shadow-lg">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="p-4 sm:p-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                    <a href="{{ url_for('employees.add') }}" class="group bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg p-4 text-white hover-lift">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                 </svg>
                             </div>
-                            <svg class="w-5 h-5 text-white/60 group-hover:text-white transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 text-white/60 group-hover:text-white transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                             </svg>
                         </div>
-                        <h4 class="text-lg font-semibold mb-2">Add Employee</h4>
-                        <p class="text-indigo-100 text-sm">Register new team member</p>
+                        <h4 class="text-base font-semibold mb-1">Add Employee</h4>
+                        <p class="text-indigo-100 text-xs">Register new team member</p>
                     </a>
                     
-                    <a href="{{ url_for('payroll.process') }}" class="group bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 text-white transform hover:scale-105 transition-all duration-200 shadow-lg">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <a href="{{ url_for('payroll.process') }}" class="group bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-4 text-white hover-lift">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
-                            <svg class="w-5 h-5 text-white/60 group-hover:text-white transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 text-white/60 group-hover:text-white transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                             </svg>
                         </div>
-                        <h4 class="text-lg font-semibold mb-2">Process Payroll</h4>
-                        <p class="text-green-100 text-sm">Run monthly payroll</p>
+                        <h4 class="text-base font-semibold mb-1">Process Payroll</h4>
+                        <p class="text-green-100 text-xs">Run monthly payroll</p>
                     </a>
                     
-                    <a href="{{ url_for('admin.reports') }}" class="group bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white transform hover:scale-105 transition-all duration-200 shadow-lg">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <a href="{{ url_for('admin.reports') }}" class="group bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-4 text-white hover-lift">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                                 </svg>
                             </div>
-                            <svg class="w-5 h-5 text-white/60 group-hover:text-white transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 text-white/60 group-hover:text-white transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                             </svg>
                         </div>
-                        <h4 class="text-lg font-semibold mb-2">View Reports</h4>
-                        <p class="text-purple-100 text-sm">Analytics & insights</p>
+                        <h4 class="text-base font-semibold mb-1">View Reports</h4>
+                        <p class="text-purple-100 text-xs">Analytics & insights</p>
                     </a>
                     
-                    <a href="{{ url_for('admin.attendance') }}" class="group bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white transform hover:scale-105 transition-all duration-200 shadow-lg">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <a href="{{ url_for('admin.attendance') }}" class="group bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-4 text-white hover-lift">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
-                            <svg class="w-5 h-5 text-white/60 group-hover:text-white transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 text-white/60 group-hover:text-white transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                             </svg>
                         </div>
-                        <h4 class="text-lg font-semibold mb-2">Manage Attendance</h4>
-                        <p class="text-blue-100 text-sm">Track employee hours</p>
+                        <h4 class="text-base font-semibold mb-1">Manage Attendance</h4>
+                        <p class="text-blue-100 text-xs">Track employee hours</p>
                     </a>
                     
-                    <a href="{{ url_for('qr_attendance.index') }}" class="group bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl p-6 text-white transform hover:scale-105 transition-all duration-200 shadow-lg">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <a href="{{ url_for('qr_attendance.index') }}" class="group bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg p-4 text-white hover-lift">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 </svg>
                             </div>
-                            <svg class="w-5 h-5 text-white/60 group-hover:text-white transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 text-white/60 group-hover:text-white transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                             </svg>
                         </div>
-                        <h4 class="text-lg font-semibold mb-2">Office Locations</h4>
-                        <p class="text-teal-100 text-sm">Manage QR locations</p>
+                        <h4 class="text-base font-semibold mb-1">Office Locations</h4>
+                        <p class="text-teal-100 text-xs">Manage QR locations</p>
                     </a>
                 </div>
             </div>
         </div>
         {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}
-
 {% block scripts %}
 <script>
 // Real-time clock
@@ -525,3 +532,4 @@ const departmentChart = new Chart(deptCtx, {
 });
 </script>
 {% endblock %}
+

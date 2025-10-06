@@ -8,7 +8,7 @@
     <div class="md:flex md:items-center md:justify-between">
         <div class="flex-1 min-w-0">
             <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-                QR Code Management
+                QR Code Management (Mobile Responsive)
             </h2>
             <p class="mt-1 text-sm text-gray-500">
                 Generate and manage QR codes for office locations.
@@ -161,90 +161,90 @@
     </div>
 
     <!-- QR Code Statistics -->
-    <div class="bg-white shadow rounded-lg p-6">
-        <h3 class="text-lg font-medium text-gray-900 mb-4">QR Code Statistics</h3>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div class="bg-blue-50 rounded-lg p-4">
-                <div class="text-2xl font-bold text-blue-600" id="total-scans">-</div>
-                <div class="text-sm text-blue-600">Total Scans Today</div>
+    <div class="bg-white shadow rounded-lg p-4 sm:p-6">
+        <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-3 sm:mb-4">QR Code Statistics</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div class="bg-blue-50 rounded-lg p-3 sm:p-4">
+                <div class="text-xl sm:text-2xl font-bold text-blue-600" id="total-scans">-</div>
+                <div class="text-xs sm:text-sm text-blue-600">Total Scans Today</div>
             </div>
-            <div class="bg-green-50 rounded-lg p-4">
-                <div class="text-2xl font-bold text-green-600" id="successful-scans">-</div>
-                <div class="text-sm text-green-600">Successful Scans</div>
+            <div class="bg-green-50 rounded-lg p-3 sm:p-4">
+                <div class="text-xl sm:text-2xl font-bold text-green-600" id="successful-scans">-</div>
+                <div class="text-xs sm:text-sm text-green-600">Successful Scans</div>
             </div>
-            <div class="bg-yellow-50 rounded-lg p-4">
-                <div class="text-2xl font-bold text-yellow-600" id="active-locations">-</div>
-                <div class="text-sm text-yellow-600">Active Locations</div>
+            <div class="bg-yellow-50 rounded-lg p-3 sm:p-4">
+                <div class="text-xl sm:text-2xl font-bold text-yellow-600" id="active-locations">-</div>
+                <div class="text-xs sm:text-sm text-yellow-600">Active Locations</div>
             </div>
-            <div class="bg-purple-50 rounded-lg p-4">
-                <div class="text-2xl font-bold text-purple-600" id="qr-codes-generated">-</div>
-                <div class="text-sm text-purple-600">QR Codes Generated</div>
+            <div class="bg-purple-50 rounded-lg p-3 sm:p-4">
+                <div class="text-xl sm:text-2xl font-bold text-purple-600" id="qr-codes-generated">-</div>
+                <div class="text-xs sm:text-sm text-purple-600">QR Codes Generated</div>
             </div>
         </div>
     </div>
 
     <!-- Recent QR Scans -->
-    <div class="bg-white shadow rounded-lg p-6">
-        <h3 class="text-lg font-medium text-gray-900 mb-4">Recent QR Scans</h3>
+    <div class="bg-white shadow rounded-lg p-4 sm:p-6">
+        <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-3 sm:mb-4">Recent QR Scans</h3>
         <div id="recent-scans">
-            <div class="text-center text-gray-500 py-8">
-                <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="text-center text-gray-500 py-6 sm:py-8">
+                <svg class="w-10 h-10 sm:w-12 sm:h-12 mx-auto text-gray-400 mb-3 sm:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                 </svg>
-                <p>No recent scans available</p>
+                <p class="text-sm sm:text-base">No recent scans available</p>
             </div>
         </div>
     </div>
 
     <!-- QR Code Instructions -->
-    <div class="bg-white shadow rounded-lg p-6">
-        <h3 class="text-lg font-medium text-gray-900 mb-4">QR Code Instructions</h3>
-        <div class="space-y-4">
+    <div class="bg-white shadow rounded-lg p-4 sm:p-6">
+        <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-3 sm:mb-4">QR Code Instructions</h3>
+        <div class="space-y-3 sm:space-y-4">
             <div class="flex items-start">
                 <div class="flex-shrink-0">
-                    <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                        <span class="text-indigo-600 font-semibold text-sm">1</span>
+                    <div class="w-6 h-6 sm:w-8 sm:h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <span class="text-indigo-600 font-semibold text-xs sm:text-sm">1</span>
                     </div>
                 </div>
-                <div class="ml-3">
-                    <h4 class="text-sm font-medium text-gray-900">Generate QR Code</h4>
-                    <p class="text-sm text-gray-600">Click "Generate QR Code" for the desired office location. The QR code will be valid for 24 hours.</p>
+                <div class="ml-2 sm:ml-3">
+                    <h4 class="text-xs sm:text-sm font-medium text-gray-900">Generate QR Code</h4>
+                    <p class="text-xs sm:text-sm text-gray-600">Click "Generate QR Code" for the desired office location. The QR code will be valid for 24 hours.</p>
                 </div>
             </div>
             
             <div class="flex items-start">
                 <div class="flex-shrink-0">
-                    <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                        <span class="text-indigo-600 font-semibold text-sm">2</span>
+                    <div class="w-6 h-6 sm:w-8 sm:h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <span class="text-indigo-600 font-semibold text-xs sm:text-sm">2</span>
                     </div>
                 </div>
-                <div class="ml-3">
-                    <h4 class="text-sm font-medium text-gray-900">Display QR Code</h4>
-                    <p class="text-sm text-gray-600">Print or display the QR code at the office location where employees should clock in/out.</p>
+                <div class="ml-2 sm:ml-3">
+                    <h4 class="text-xs sm:text-sm font-medium text-gray-900">Display QR Code</h4>
+                    <p class="text-xs sm:text-sm text-gray-600">Print or display the QR code at the office location where employees should clock in/out.</p>
                 </div>
             </div>
             
             <div class="flex items-start">
                 <div class="flex-shrink-0">
-                    <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                        <span class="text-indigo-600 font-semibold text-sm">3</span>
+                    <div class="w-6 h-6 sm:w-8 sm:h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <span class="text-indigo-600 font-semibold text-xs sm:text-sm">3</span>
                     </div>
                 </div>
-                <div class="ml-3">
-                    <h4 class="text-sm font-medium text-gray-900">Employee Scanning</h4>
-                    <p class="text-sm text-gray-600">Employees use their mobile devices to scan the QR code and clock in/out automatically.</p>
+                <div class="ml-2 sm:ml-3">
+                    <h4 class="text-xs sm:text-sm font-medium text-gray-900">Employee Scanning</h4>
+                    <p class="text-xs sm:text-sm text-gray-600">Employees use their mobile devices to scan the QR code and clock in/out automatically.</p>
                 </div>
             </div>
             
             <div class="flex items-start">
                 <div class="flex-shrink-0">
-                    <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                        <span class="text-indigo-600 font-semibold text-sm">4</span>
+                    <div class="w-6 h-6 sm:w-8 sm:h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <span class="text-indigo-600 font-semibold text-xs sm:text-sm">4</span>
                     </div>
                 </div>
-                <div class="ml-3">
-                    <h4 class="text-sm font-medium text-gray-900">Location Validation</h4>
-                    <p class="text-sm text-gray-600">The system validates that employees are physically present at the office location before allowing clock in/out.</p>
+                <div class="ml-2 sm:ml-3">
+                    <h4 class="text-xs sm:text-sm font-medium text-gray-900">Location Validation</h4>
+                    <p class="text-xs sm:text-sm text-gray-600">The system validates that employees are physically present at the office location before allowing clock in/out.</p>
                 </div>
             </div>
         </div>
